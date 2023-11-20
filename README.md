@@ -13,6 +13,13 @@ Purpose of this project is to create an application that allows users to create 
 - Python
 - Docker
 
+### Database setup
+
+```
+docker run --name=MusicApp --env="MYSQL_ROOT_PASSWORD=root_password" -p 3306:3306 -d mysql:latest
+docker exec -it MusicApp mysql -h localhost -P 3306 --protocol=tcp -u root -proot_password
+```
+
 ### Acknowledgments
 
 The project was inspired by [letterboxd]([https://github.com/oluwatosin17](https://letterboxd.com/)). The project uses spotify's API to collect public data.
