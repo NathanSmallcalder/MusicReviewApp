@@ -118,45 +118,45 @@ def get_album_tracks(access_token, album_id):
         print(f'Error {response.status_code}: Unable to fetch album\'s tracks.')
         return None
 
+# Creates a dictionary out of the artists' albums
 def forge_album_tracklist(artist_albums, token):
     albums_list = []
     for album in artist_albums:
-        album_id = album['id']
-        album_name = album['name']
-        release_date = album['release_date']
+        if album['album_group'] == 'album':
+            album_id = album['id']
+            album_name = album['name']
+            release_date = album['release_date']
+            album_data = {
+                "album_name": album_name,
+                "tracks": [],
+                'release_date': release_date,
+                'images':album['images'][0]['url']
+            }
 
+            album_tracks = get_album_tracks(token, album_id)
+            for track in album_tracks:
+                track_title = track['name']
+                track_length_ms = track['duration_ms']
 
-        album_data = {
-            "album_name": album_name,
-            "tracks": [],
-            'release_date': release_date,
-            'images':album['images'][0]['url']
-        }
+                track_length_sec = track_length_ms / 1000 / 60
+                
+                # Add track information to the current album
+                album_data['tracks'].append({
+                    'track_title': track_title,
+                    'track_length_sec': track_length_sec
+                })
 
-        album_tracks = get_album_tracks(token, album_id)
-        for track in album_tracks:
-            track_title = track['name']
-            track_length_ms = track['duration_ms']
-
-            track_length_sec = track_length_ms / 1000 / 60
-
-            # Add track information to the current album
-            album_data['tracks'].append({
-                'track_title': track_title,
-                'track_length_sec': track_length_sec
-            })
-
-        # Add the album data to the list of albums
-        albums_list.append(album_data)
+            # Add the album data to the list of albums
+            albums_list.append(album_data)
+        else:
+            pass
     return albums_list
 
 def get_related_artists(artist_id, access_token):
     # Spotify API endpoint for getting related artists
     endpoint = f'https://api.spotify.com/v1/artists/{artist_id}/related-artists'
-
     # Set up headers with the access token
     headers = {'Authorization': f'Bearer {access_token}'}
-
     # Make the request
     try:
         response = requests.get(endpoint, headers=headers)
@@ -171,7 +171,9 @@ def get_related_artists(artist_id, access_token):
 def related_artist_ids(related_artists):
     relatedArtists = []
     for related in related_artists:
+        print(related)
         related_temp = {
+            "ArtistsId": related['id'],
             "ArtistName": related['name'],
             "albums": [],
             'ArtistId': related['id'],
@@ -183,19 +185,5 @@ def related_artist_ids(related_artists):
     return relatedArtists
 
 
-related = get_related_artists("3SXwqSqAoBz9WCI9PDQzY6",token)
-related_artists = related_artist_ids(related)
-#print(related_artists)
-
-for artists in related_artists:
-    artist_albums = get_artist_albums(token,artists['ArtistId'])
-    for albums in artist_albums:
-        albums_list = forge_album_tracklist(artist_albums, token)
-        artists['albums'].append(albums_list)
-        time.sleep(10)
-
-    print(artists)
 
 
-
-print(related_artists)
