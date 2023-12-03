@@ -28,20 +28,22 @@ connection = mysql.connector.connect(**config)
 
 cursor = connection.cursor(buffered=True)
 
-related = get_related_artists("1hLiboQ98IQWhpKeP9vRFw",token)
+related = get_related_artists("22RISwgVJyZu9lpqAcv1F5",token)
 related_artists = related_artist_ids(related)
 
 
-
+"""
+Loop to add artist, albums and songs to the database.
+Iterates Per Related Artist
+"""
 for artists in related_artists:
-    sql_select = f"SELECT ArtistID FROM Album Artist ArtistID = '{artists['ArtistId']}'"
+    sql_select = f"SELECT ArtistID FROM Artist WHERE ArtistID = '{artists['ArtistId']}'"
      # Execute the SQL statement
     cursor.execute(sql_select)
-            # Fetch the result
+    # Fetch the result
     result = cursor.fetchone()
     print(result)
-    if result:
-        pass
+    if result == None:
         """ 
         Iterates through artists and inserts them into the database
         """
@@ -81,6 +83,9 @@ for artists in related_artists:
                 else:
                     print(f"No album found with the title '{album_name}'")
     else:
+        """
+        If artist data is already collected.
+        """
         pass
         
     connection.commit()
