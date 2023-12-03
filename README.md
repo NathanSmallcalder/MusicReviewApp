@@ -16,7 +16,7 @@ Purpose of this project is to create an application that allows users to create 
 ### Database setup
 
 ```
-docker run --name=MusicApp --env="MYSQL_ROOT_PASSWORD=root_password" -p 3306:3306 -d mysql:latest
+docker run --name=MusicApp --env="MYSQL_ROOT_PASSWORD=root_password" -p 3306:3306 -d mysql
 docker exec -it MusicApp mysql -h localhost -P 3306 --protocol=tcp -u root -proot_password
 ```
 
