@@ -6,7 +6,7 @@ CREATE TABLE User (
     UserID INT PRIMARY KEY AUTO_INCREMENT,
     Username VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL,
-    PasswordHash VARCHAR(40) NOT NULL
+    PasswordHash VARCHAR(64) NOT NULL
 );
 
 -- Create Artist table
