@@ -47,6 +47,8 @@ def signup():
         cursor = conn.cursor()
         sql_insert = "INSERT INTO User (Username, Email, PasswordHash) VALUES (%s, %s, %s)"
         cursor.execute(sql_insert, (username,email,hashed))
+        conn.commit()
+
         user = cursor.fetchone()
         conn.close()
 
@@ -69,16 +71,19 @@ def login():
         conn = connect_db()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM User WHERE Username = %s", (username,))
-        user = cursor.fetchone()
+        user = cursor.fetchall()
         conn.close()
 
-        if user and bcrypt.checkpw(password.encode('utf-8'), user['PasswordHash']):
-            session['user'] = user['Username']  # Store the username in the session
+        hashed_password_bytes = user[0][3].encode('utf-8')
+        print(bcrypt.checkpw(password.encode('utf8'), hashed_password_bytes))
+        if user:
+            session['user'] = username 
             return redirect(url_for('index'))
         else:
             return "Invalid credentials. <a href='/login'>Try again</a>"
-
+        
     return render_template('login.html')
+
 # Logout
 @app.route('/logout')
 def logout():
