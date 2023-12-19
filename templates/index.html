@@ -39,10 +39,17 @@
             visibility: visible;
             opacity: 1;
         }
+
+        .columns {
+            background-color: #181818;
+        }
+        .form.box {
+            background-color: #181818;
+        }
     </style>
 </head>
+
 <body>
-    
 <div class="columns" mx = "1rem">
     <div class = "column ml-6 mr-6 pt-6">
         <div class="select">
@@ -81,7 +88,6 @@
         {% for albums in Albums %}
             <!-- Wrap each album image in a tooltip container -->
             <div class="tooltip">
-
                 <a href = {{ url_for('getAlbum', album = albums[0]) }}><img src="{{ albums[3] }}",  height="60" width="60" alt=""></a>
                 <!-- The tooltip text (album review) -->
                 <div class="tooltiptext">

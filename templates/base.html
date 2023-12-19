@@ -8,30 +8,90 @@
 	<script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
 	<title>Music Review App</title>
 	<style>
+		body {
+			font-family: 'Roboto';
+			color: white;
+		}
+		.navbar {
+			background-color:#191414 ;
+			color: white;
+			padding:5px;
+		}
+		.navbar-item{
+			color: white;
+		}
+		.button {
+			background-color: #1DB954;
+			border-color: #1DB954;
+			font-family: 'Roboto';
+			color: white;
+		}
+		.columns {
+            background-color: #181818;
+        }
 
 	</style>
 	<script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
 	<!-- <script src="vue.js"></script> -->
 </head>
-<body >
+<body>
 	<!---Navbar---->
-	<nav class = "navbar is-link">
-	<div id="navbarBasicExample" class="navbar-menu">
-		<div class="navbar-start">
-		  <a class="navbar-item" href="{{ url_for('index')}}">
-			Home
-		  <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-			<span aria-hidden="true"></span>
-			<span aria-hidden="true"></span>
-			<span aria-hidden="true"></span>
-		  </a>
-		</div>
-	  </nav>
-	</div>
-    </div>
-</div>
+	<nav class="navbar"> 
+	<div class = "navbar-brand">
+			<a href="{{ url_for('index') }}" class="navbar-item">
+				<img src="{{url_for('static', filename='Logo.png')}}" />
+			</a>
+			<div class="navbar-burger" 
+				 data-target="navBackgroundDemo1"> 
+				<span></span> 
+				<span></span> 
+				<span></span> 
+			</div> 
+		</div> 
 
+		<div id="navBackgroundDemo1" 
+			 class="navbar-menu"> 
+			<div class="navbar-start"> 
+				<a href="{{ url_for('index') }}" class="navbar-item" 
+				   href="#"> 
+					Home 
+				</a> 
+				<a class="navbar-item" 
+				   href="#"> 
+					Placeholder
+				</a> 
 
+			</div> 
+
+			{% if 'user' in session %}
+				<div class="navbar-end"> 
+					<div class="navbar-item"> 
+						<div class="field is-grouped"> 
+							<p class="control"> 
+								<p>Welcome, {{ session['user'] }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+							</p> 
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div class="navbar-end"> 
+					<div class="navbar-item"> 
+						<div class="field is-grouped"> 
+							<p class="control"> 
+								<a href="{{ url_for('signup') }}" class="button" >Signup</a> 
+							</p> 
+
+							<p class="control"> 
+								<a href="{{ url_for('login') }}" class="button">Login</a> 
+							</p> 
+
+						</div> 
+					</div> 
+				</div> 
+			</div> 
+		{% endif %}
+	</nav> 
+</div> 
 {% block content%}
 
 

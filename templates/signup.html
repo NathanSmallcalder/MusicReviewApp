@@ -8,31 +8,59 @@
 	<script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
 	<title>Music Review App</title>
 	<style>
+		/* Custom styles */
+		.hero-body {
+			background-color: black; /* Set the background color */
+		}
+
+		/* Customize the form */
+		.box {
+			background-color: #181818; /* Set the box background color */
+			border-radius: 10px; /* Add rounded corners to the box */
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+		}
+
+		.label {
+			color: white; /* Set label text color */
+		}
+
+		.input {
+			border-color: #ccc; /* Set input border color */
+		}
+
+		.button {
+			background-color: #4caf50; /* Set button background color */
+			color: #fff; /* Set button text color */
+		}
 
 	</style>
 	<script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
 	<!-- <script src="vue.js"></script> -->
 </head>
-<section class="hero is-primary is-fullheight">
+
+<body>
+
+<section class="hero is-fullheight">
   <div class="hero-body">
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
           <form action="{{ url_for('signup') }}" method="post" class="box">
             <div class="field">
-                <label for="email" class="label">email</label>
-                <div class="control has-icons-left">
-                  <input type="name"  name="email" class="input" required>
-                  <span class="icon is-small is-left">
-                    <i class="fa fa-envelope"></i>
-                  </span>
-                </div>
+              <label for="email" class="label">Email</label>
+              <div class="control has-icons-left">
+                <input type="email"  name="email" class="input" required>
+                <span class="icon is-small is-left">
+                  <i class="fa fa-envelope"></i>
+                </span>
+              </div>
+            </div>
             <div class="field">
               <label for="name" class="label">Name</label>
               <div class="control has-icons-left">
-                <input type="name"  name="username" class="input" required>
+                <input type="text"  name="username" class="input" required>
                 <span class="icon is-small is-left">
-                  <i class="fa fa-envelope"></i>
+                  <i class="fa fa-user"></i>
                 </span>
               </div>
             </div>
@@ -46,7 +74,7 @@
               </div>
             </div>
             <div class="field">
-              <button class="button is-success" value="Login">
+              <button class="button is-success" value="Signup">
                 Signup
               </button>
             </div>
@@ -56,3 +84,7 @@
     </div>
   </div>
 </section>
+
+</body>
+
+</html>

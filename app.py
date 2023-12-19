@@ -1,33 +1,16 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import mysql.connector
 import os
 import bcrypt
+from databaseCalls import *
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
-db_config  = {
-    'user': os.getenv("USER"),
-    'password': os.getenv("PASSWORD"),
-    'host': 'localhost',
-    'port': 3306,
-    'database': 'musicDatabase',
-}
-
-def connect_db():
-    return mysql.connector.connect(**db_config)
 
 @app.route('/')
 def index():
-    connection = connect_db()
-    cursor = connection.cursor(buffered=True)
-
-    sql_select = f"SELECT * FROM Album"
-    cursor.execute(sql_select)
-    Albums = cursor.fetchall()
-
-    #sql_select = f"SELECT Genre FROM Artist"
-    return render_template('index.html', title='Flask Template Example', content='Hello, Flask!',Albums = Albums)
+    Albums = get_albums_db()
+    return render_template('index.html', title='Album Review', content='Hello, Flask!',Albums = Albums)
 
 @app.route('/signup', methods=['GET','POST'])
 def signup():
@@ -35,27 +18,18 @@ def signup():
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
-
-        # Hash Password
-        # Adding the salt to password
-        salt = bcrypt.gensalt()
-        # Hashing the password
-        hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-        
-        # Check credentials in the database
-        conn = connect_db()
-        cursor = conn.cursor()
-        sql_insert = "INSERT INTO User (Username, Email, PasswordHash) VALUES (%s, %s, %s)"
-        cursor.execute(sql_insert, (username,email,hashed))
-        conn.commit()
-
-        user = cursor.fetchone()
-        conn.close()
-
-        if user:
-            session['user'] = user[1]  # Store the username in the session
+        try:
+            # Hash Password
+            # Adding the salt to password
+            salt = bcrypt.gensalt()
+            # Hashing the password
+            hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
+            
+            # Check credentials in the database
+            sign_up_db(username,email,hashed)
+            session['user'] = username
             return redirect(url_for('index'))
-        else:
+        except:
             return "Invalid credentials. <a href='/login'>Try again</a>"
 
     return render_template('signup.html')
@@ -67,16 +41,9 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        # Check credentials in the database
-        conn = connect_db()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM User WHERE Username = %s", (username,))
-        user = cursor.fetchall()
-        conn.close()
-
-        hashed_password_bytes = user[0][3].encode('utf-8')
-        print(bcrypt.checkpw(password.encode('utf8'), hashed_password_bytes))
-        if user:
+        user = get_account_db(username)
+    
+        if user and bcrypt.checkpw(password.encode('utf8'), user[0][3].encode('utf-8')):
             session['user'] = username 
             return redirect(url_for('index'))
         else:
@@ -88,28 +55,17 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('user', None)
-    return redirect(url_for('home'))
+    return redirect(url_for('index'))
 
 
 @app.route('/album', methods=['GET','POST'])
 def getAlbum():
     album = request.args.get('album')
-    connection = connect_db()
-    cursor = connection.cursor(buffered=True)
 
-    sql_select = f"SELECT * FROM Album WHERE AlbumID = {album}"
-    cursor.execute(sql_select)
-    albums = cursor.fetchone()
-    print(albums)
+    albums = get_album_by_albumID(album)
+    songs = get_songs_by_albumID(album)
+    artist = get_artist_by_albumID(album)
 
-    sql_select = f"SELECT * FROM Song WHERE AlbumID = {album}"
-    cursor.execute(sql_select)
-    songs = cursor.fetchall()
-
-    sql_select = f"SELECT * FROM Artist JOIN Album ON Artist.ArtistID = Album.ArtistID WHERE Album.AlbumID = {album};"
-    cursor.execute(sql_select)
-    artist = cursor.fetchone()
-    print(songs)
     return render_template('AlbumPage.html', 
                            albums = albums,
                            songs = songs, 
