@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, Response
 import os
 import bcrypt
+import json
 from databaseCalls import *
 
 app = Flask(__name__)
@@ -26,8 +27,9 @@ def signup():
             hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
             
             # Check credentials in the database
-            sign_up_db(username,email,hashed)
-            session['user'] = username
+            account = sign_up_db(username,email,hashed)
+            print(account)
+            session['user'] = account
             return redirect(url_for('index'))
         except:
             return "Invalid credentials. <a href='/login'>Try again</a>"
@@ -56,6 +58,34 @@ def login():
 def logout():
     session.pop('user', None)
     return redirect(url_for('index'))
+
+
+@app.route('/albumReview', methods=['GET','POST'])
+def getAlbumReview():
+    album = request.args.get('album')
+
+    albums = get_album_by_albumID(album)
+    songs = get_songs_by_albumID(album)
+    artist = get_artist_by_albumID(album)
+    
+    SongLen = len(songs)
+    print(SongLen)
+    return render_template('AlbumReviewPage.html', 
+                           albums = albums,
+                           songs = songs, 
+                           artist = artist,
+                           SongLen = SongLen,
+                           UserId = session['user'])
+
+
+@app.route('/albumReviewSend', methods=['POST'])
+def PostAlbumReview():
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        data = json.loads(request.data)
+        print(data)
+    return Response(status = 200)
+
 
 
 @app.route('/album', methods=['GET','POST'])

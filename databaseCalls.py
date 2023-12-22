@@ -48,12 +48,16 @@ def sign_up_db(username,email,hashed):
         sql_insert = "INSERT INTO User (Username, Email, PasswordHash) VALUES (%s, %s, %s)"
         cursor.execute(sql_insert, (username,email,hashed))
         connection.commit()
+        sql_select = "SELECT UserID FROM User WHERE Username = %s"
+        cursor.execute(sql_select, (username,))
+        result = cursor.fetchone()
     except Exception as e:
         # Handle exceptions, log errors, or raise them as needed
         print(f"Error: {e}")
         return None
     finally:
         close_connection(connection, cursor)
+        return result[0]
 
 # Gets Album by album ID
 def get_album_by_albumID(album_id):
