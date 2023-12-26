@@ -158,6 +158,7 @@ function Review() {
     var currentDate = new Date();
    
     var albumId = {{ albums[0] }};
+
     var album = {
         "AlbumId": albumId,
         "UserId": {{ UserId }},
@@ -165,6 +166,7 @@ function Review() {
         "Comment": comment,
         "DatePosted": currentDate
     };
+    
     albumJson = []
     albumJson.push(album);
     alert(albumJson)
