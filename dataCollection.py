@@ -78,8 +78,8 @@ for artists in related_artists:
                     album_id = result[0]
                     print(f"Album ID for '{album_name}': {album_id}")
                     print(songs['track_title'])
-                    sql_insert = "INSERT INTO Song (Title,AlbumID,ArtistID) VALUES (%s, %s, %s)"
-                    cursor.execute(sql_insert, (songs['track_title'],album_id,artists['ArtistsId']))
+                    sql_insert = "INSERT INTO Song (Title,AlbumID) VALUES (%s, %s)"
+                    cursor.execute(sql_insert, (songs['track_title'],album_id))
                 else:
                     print(f"No album found with the title '{album_name}'")
     else:

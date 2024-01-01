@@ -43,9 +43,7 @@ CREATE TABLE Song (
     SongID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255) NOT NULL,
     AlbumID INT,
-    ArtistID VARCHAR(255),
-    FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID),
-    FOREIGN KEY (ArtistID) REFERENCES Artist(ArtistID)
+    FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID)
 );
 
 -- Create UserAlbumList table
@@ -57,19 +55,6 @@ CREATE TABLE UserAlbumList (
     CreatedDate DATETIME,
     FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
-
--- Create AlbumReview table for Album reviews
-CREATE TABLE AlbumReview (
-    AlbumReviewID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID INT,
-    AlbumID INT,
-    Rating INT,
-    Comment TEXT,
-    DatePosted DATETIME,
-    FOREIGN KEY (UserID) REFERENCES User(UserID),
-    FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID)
-);
-
 
 -- Create SongReview table for individual song reviews
 CREATE TABLE SongReview (

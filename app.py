@@ -41,7 +41,9 @@ def signup():
             # Check credentials in the database
             account = sign_up_db(username,email,hashed)
             print(account)
-            session['user'] = account
+            session['user'] = account[0]
+            session['nickname'] = account[1]
+            
             return redirect(url_for('index'))
         except:
             return "Invalid credentials. <a href='/login'>Try again</a>"
@@ -58,7 +60,8 @@ def login():
         user = get_account_db(username)
     
         if user and bcrypt.checkpw(password.encode('utf8'), user[0][3].encode('utf-8')):
-            session['user'] = user[0][0] 
+            session['user'] = user[0][0]
+            session['nickname'] = user[0][1]
             return redirect(url_for('index'))
         else:
             return "Invalid credentials. <a href='/login'>Try again</a>"
