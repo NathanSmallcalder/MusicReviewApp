@@ -1,0 +1,37 @@
+.search-container {
+    max-width: 400px;
+    position: relative;
+    margin-top: 10px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#search-results {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    max-height: 200px;
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #333;
+}
+
+#search-results li {
+    background-color: #333;
+  }
+
+#search-results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#search-results li:hover {
+    background-color: #333;
+}

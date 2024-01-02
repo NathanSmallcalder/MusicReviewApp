@@ -115,7 +115,7 @@ def PostAlbumReview():
 
 
 
-### Album Page
+### Album Page                                                
 @app.route('/album', methods=['GET','POST'])
 def getAlbum():
     album = request.args.get('album')
@@ -131,6 +131,27 @@ def getAlbum():
                            album_details = album_details, 
                            artist = artist,
                            comments =comments)
+
+@app.route('/search', methods=['POST'])
+def search():
+    try:
+        # Retrieve search term from the Ajax request
+        search_term = request.form.get('searchTerm')
+
+        # Perform the database query
+        search_results = getSearch(search_term)
+        # Process the results and send back as JSON
+        formatted_results = []
+        print(search_results)
+        for row in search_results:
+            formatted_results.append({'id': row[0], 'name': row[1]})
+
+
+        return jsonify(formatted_results)
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 
 if __name__ == '__main__':
     app.run(debug=True)

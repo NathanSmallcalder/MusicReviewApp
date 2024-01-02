@@ -5,9 +5,21 @@
 	<meta charset="utf-8" />
 	<link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-	<script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="static/script.js"></script>
+
+	<script>
+    if (window.jQuery) {
+        console.log("jQuery is loaded!");
+    } else {
+        console.error("jQuery is not loaded!");
+    }
+
+	</script>
 	<title>Music Review App</title>
+	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 	<style>
+
 		body {
 			font-family: 'Roboto';
 			color: white;
@@ -72,8 +84,7 @@
             color: #fff; /* White text color */
         }
 	</style>
-	<script src="https://unpkg.com/vue@next"></script> <!-- https://v3.vuejs.org/guide/installation.html#cdn -->
-	<!-- <script src="vue.js"></script> -->
+
 </head>
 <body>
 	<!---Navbar---->
@@ -100,8 +111,12 @@
 				<a class="navbar-item" 
 				   href="#"> 
 					Placeholder
-				</a> 
-
+				</a> 	
+			
+			<div class="search-container">
+					<input type="input" id="search-input" placeholder="Search...">
+					<ul id="search-results"></ul>
+				</div>
 			</div> 
 
 			{% if 'user' in session %}

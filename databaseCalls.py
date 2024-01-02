@@ -247,3 +247,24 @@ def get_album_comments(album_id):
             cursor.close()
         if connection.is_connected():
             connection.close()
+
+
+def getSearch(search_term):
+    try:
+        connection, cursor = get_cursor()
+        query = f"""
+                    SELECT * FROM Album WHERE Title LIKE '%{search_term}%'
+                """
+        cursor.execute(query)
+        search_results = cursor.fetchall()
+        return search_results
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+    finally:
+        # Close the cursor and connection
+        if cursor:
+            cursor.close()
+        if connection.is_connected():
+            connection.close()
