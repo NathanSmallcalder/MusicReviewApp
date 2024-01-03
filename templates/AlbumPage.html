@@ -31,7 +31,7 @@
 
                                 <div class="rate">
                                     <div class="star-rating" data-rating="3">
-                                        {% for i in range(album_details[0][3] | int) %}
+                                        {% for i in range(album_details[0][4] | int) %}
                                             <span class="star">&#9733;</span>
                                         {% endfor %}
                                     </div>
@@ -46,6 +46,11 @@
             <div class="column is-half">
                 <div class="song-container">
                     <p class="title is-5">{{ song[2] }}</p>
+                    <audio controls>
+                        <source src="{{ song[6] }}" type="audio/mp3">
+                        Your browser does not support the audio element.
+                      </audio>
+                      
                     <div class="rate">
                         <div class="star-rating" data-rating="{{ song[4] | int }}">
                             {% for i in range(song[4] | int) %}

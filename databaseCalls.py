@@ -181,7 +181,9 @@ def get_album_details(album_id):
                 S.SongID,
                 GROUP_CONCAT(DISTINCT S.Title ORDER BY S.Title) AS SongTitles,
                 AVG(R.Rating) AS AverageAlbumRating,
-                AVG(SR.Rating) AS AverageSongRating
+                AVG(SR.Rating) AS AverageSongRating,
+                SpotifyID,
+                TrackURL
             FROM
                 Album A
             LEFT JOIN Song S ON A.AlbumID = S.AlbumID

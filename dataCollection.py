@@ -42,7 +42,7 @@ for artists in related_artists:
     cursor.execute(sql_select)
     # Fetch the result
     result = cursor.fetchone()
-    print(result)
+    
     if result == None:
         """ 
         Iterates through artists and inserts them into the database
@@ -59,11 +59,13 @@ for artists in related_artists:
             """
             albums_list = forge_album_tracklist(artist_albums, token)
             artists['albums'].append(albums_list)
-            print(albums)
+            
             sql_insert = "INSERT INTO Album (Title, ReleaseDate, CoverImage,ArtistID) VALUES (%s, %s, %s, %s)"
             cursor.execute(sql_insert, ((remove_special_characters(albums['album_name'])),(albums['release_date']),albums['images'],artists['ArtistsId']))
             tracks = albums['tracks']
             for songs in tracks:
+                print("=============================================")
+                print(songs)
                 """"
                 Iterates through songs and inserts them into the database
                 """
@@ -76,10 +78,11 @@ for artists in related_artists:
                 result = cursor.fetchone()
                 if result:
                     album_id = result[0]
+                    print(songs)
                     print(f"Album ID for '{album_name}': {album_id}")
                     print(songs['track_title'])
-                    sql_insert = "INSERT INTO Song (Title,AlbumID) VALUES (%s, %s)"
-                    cursor.execute(sql_insert, (songs['track_title'],album_id))
+                    sql_insert = "INSERT INTO Song (Title,AlbumID,SpotifyID,TrackURL) VALUES (%s, %s, %s,%s)"
+                    cursor.execute(sql_insert, (songs['track_title'],album_id,songs['track_id'], songs['preview_Link']))
                 else:
                     print(f"No album found with the title '{album_name}'")
     else:

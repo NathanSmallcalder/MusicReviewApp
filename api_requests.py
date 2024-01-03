@@ -135,15 +135,20 @@ def forge_album_tracklist(artist_albums, token):
 
             album_tracks = get_album_tracks(token, album_id)
             for track in album_tracks:
+                print(track)
+                track_id = track['id']
                 track_title = track['name']
                 track_length_ms = track['duration_ms']
+                track_url = track['preview_url']
 
                 track_length_sec = track_length_ms / 1000 / 60
                 
                 # Add track information to the current album
                 album_data['tracks'].append({
+                    'track_id': track_id,
                     'track_title': track_title,
-                    'track_length_sec': track_length_sec
+                    'track_length_sec': track_length_sec,
+                    'preview_Link':track_url
                 })
 
             # Add the album data to the list of albums

@@ -122,9 +122,10 @@ def getAlbum():
 
     albums = get_album_by_albumID(album)
     album_details = get_album_details(album)
+    print(album_details)
     artist = get_artist_by_albumID(album)
     comments = get_album_comments(album)
-    print(artist)
+    print(album_details)
 
     return render_template('AlbumPage.html', 
                            albums = albums, 
