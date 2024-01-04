@@ -135,7 +135,7 @@ def forge_album_tracklist(artist_albums, token):
 
             album_tracks = get_album_tracks(token, album_id)
             for track in album_tracks:
-                print(track)
+           
                 track_id = track['id']
                 track_title = track['name']
                 track_length_ms = track['duration_ms']
@@ -175,8 +175,8 @@ def get_related_artists(artist_id, access_token):
 #Gets Related Artists
 def related_artist_ids(related_artists):
     relatedArtists = []
+    print(related_artists)
     for related in related_artists:
-        print(related)
         related_temp = {
             "ArtistsId": related['id'],
             "ArtistName": related['name'],

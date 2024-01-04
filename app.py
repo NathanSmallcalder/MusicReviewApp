@@ -22,6 +22,7 @@ def is_valid_album_review(data):
 @app.route('/')
 def index():
     Albums = get_albums_db()
+    print(Albums)
     return render_template('index.html', title='Album Review', content='Hello, Flask!',Albums = Albums)
 
 # Signup
@@ -80,16 +81,18 @@ def getAlbumReview():
     album = request.args.get('album')
 
     albums = get_album_by_albumID(album)
+    album_details = get_album_details(album)
+
     songs = get_songs_by_albumID(album)
     artist = get_artist_by_albumID(album)
-    print(artist)
-    
+    print(album_details)
     SongLen = len(songs)
-    print(SongLen)
+
     return render_template('AlbumReviewPage.html', 
                            albums = albums,
                            songs = songs, 
                            artist = artist,
+                           albumDetails = album_details,
                            SongLen = SongLen,
                            UserId = session['user'])
 
@@ -122,7 +125,6 @@ def getAlbum():
 
     albums = get_album_by_albumID(album)
     album_details = get_album_details(album)
-    print(album_details)
     artist = get_artist_by_albumID(album)
     comments = get_album_comments(album)
     print(album_details)

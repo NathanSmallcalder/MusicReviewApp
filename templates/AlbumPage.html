@@ -9,7 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ albums[1] }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <style>
+            *{
+    margin: 0;
+    padding: 0;
+    }
+  
+    </style>
 </head>
 {% block content %}
 <body>
@@ -32,7 +39,7 @@
                                 <div class="rate">
                                     <div class="star-rating" data-rating="3">
                                         {% for i in range(album_details[0][4] | int) %}
-                                            <span class="star">&#9733;</span>
+                                        <span class="star" style="color: #FFD700;">&#9733;</span>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -54,7 +61,7 @@
                     <div class="rate">
                         <div class="star-rating" data-rating="{{ song[4] | int }}">
                             {% for i in range(song[4] | int) %}
-                                <span class="star">&#9733;</span>
+                            <span class="star" style="color: #FFD700;">&#9733;</span>
                             {% endfor %}
                         </div>
                     </div>

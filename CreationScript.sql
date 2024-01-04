@@ -43,17 +43,9 @@ CREATE TABLE Song (
     SongID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255) NOT NULL,
     AlbumID INT,
+    SpotifyID VARCHAR(100),
+    TrackURL VARCHAR(255),
     FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID)
-);
-
--- Create UserAlbumList table
-CREATE TABLE UserAlbumList (
-    ListID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID INT,
-    ListName VARCHAR(255),
-    Description TEXT,
-    CreatedDate DATETIME,
-    FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 -- Create SongReview table for individual song reviews
@@ -66,6 +58,23 @@ CREATE TABLE SongReview (
     FOREIGN KEY (SongID) REFERENCES Song(SongID)
 );
 
+-- Create UserAlbumList table
+CREATE TABLE UserAlbumList (
+    UserListID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID INT,
+    ListName VARCHAR(255),
+    Description TEXT,
+    CreatedDate DATETIME,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
+
+CREATE TABLE List (
+    ListID INT PRIMARY KEY AUTO_INCREMENT,
+    UserListID INT,
+    AlbumID INT,
+    FOREIGN KEY (UserListID) REFERENCES UserAlbumList(UserListID),
+    FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID)
+);
 
 -- Create Following table
 CREATE TABLE Following (
