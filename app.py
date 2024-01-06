@@ -23,7 +23,19 @@ def is_valid_album_review(data):
 def index():
     Albums = get_albums_db()
     print(Albums)
-    return render_template('index.html', title='Album Review', content='Hello, Flask!',Albums = Albums)
+    return render_template('index.html', title='Album Review',Albums = Albums)
+
+@app.route('/queryAlbums')
+def queryAlbums():
+    # Get selected rating and year from the query parameters
+    selected_rating = request.args.get('selectedRating', None)
+    selected_year = request.args.get('selectedYear', None)
+    print(selected_year)
+    Albums = filter_albums(selected_rating,selected_year)
+    print(Albums)
+    
+    return render_template('index.html', title='Album Review',Albums = Albums)
+    
 
 # Signup
 @app.route('/signup', methods=['GET','POST'])
@@ -135,6 +147,8 @@ def getAlbum():
                            artist = artist,
                            comments =comments)
 
+
+
 @app.route('/search', methods=['POST'])
 def search():
     try:
@@ -148,7 +162,6 @@ def search():
         print(search_results)
         for row in search_results:
             formatted_results.append({'id': row[0], 'name': row[1]})
-
 
         return jsonify(formatted_results)
 

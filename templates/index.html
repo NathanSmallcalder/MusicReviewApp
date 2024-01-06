@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <title>{{ title }}</title>
 
     <style>
@@ -44,59 +44,64 @@
         .columns {
             background-color: #181818;
         }
-
     </style>
 </head>
 
 <body>
-<div class="columns" mx = "1rem">
-    <div class = "column ml-6 mr-6 pt-6">
-        <div class="select">
-            <select>
-            <option>Any</option>
-            <option>1 Star</option>
-            <option>2 Star</option>
-            <option>3 Star</option>
-            <option>4 Star</option>
-            <option>5 Star</option>
-            </select>
-        </div>
-
-        <div id="year" name="year" class = "select">
-            <select>
-            <option>Any</option>
-            {% for year in range(2023, 1939, -1) %}
-                <option value="{{ year }}">{{ year }}</option>
-            {% endfor %}
-            </select>
-        </div>
-
-        <!--- Genre-->
-        <div class="select">
-            <select>
-                {% for album in Albums %}
+    <div class="columns" mx="1rem">
+        <div class="column ml-6 mr-6 pt-6">
+            <div class="select">
+                <select id="ratingSelect">
+                    <option>Any</option>
                     <option>1 Star</option>
-                {% endfor %}
-            </select>
-        </div> 
-        
-        <button class="button">Button</button>
-        <br>
-        <br>
-
-        {% for albums in Albums %}
-            <!-- Wrap each album image in a tooltip container -->
-            <div class="tooltip">
-                <a href = {{ url_for('getAlbum', album = albums[0]) }}><img src="{{ albums[3] }}",  height="60" width="60" alt=""></a>
-                <!-- The tooltip text (album review) -->
-                <div class="tooltiptext">
-                    <p>{{ albums[1] }}</p>
-                </div>
+                    <option>2 Star</option>
+                    <option>3 Star</option>
+                    <option>4 Star</option>
+                    <option>5 Star</option>
+                </select>
             </div>
-        {% endfor %}
-    </div>
-</div>
-</body>
-</html>
 
+            <div id="year" name="year" class="select">
+                <select id="yearSelect">
+                    <option>Any</option>
+                    {% for year in range(2023, 1939, -1) %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="button" onclick="handleButtonClick()">Button</button>
+            <br>
+            <br>
+
+            {% for album in Albums %}
+                <!-- Wrap each album image in a tooltip container -->
+                <div class="tooltip">
+                    <a href="{{ url_for('getAlbum', album=album[0]) }}"><img src="{{ album[3] }}" height="60" width="60" alt=""></a>
+                    <!-- The tooltip text (album review) -->
+                    <div class="tooltiptext">
+                        <p>{{ album[1] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+<script>
+function handleButtonClick() {
+    // Get selected values from dropdowns
+    var selectedRating = document.getElementById("ratingSelect").value;
+    var selectedYear = document.getElementById("yearSelect").value;
+    alert(selectedRating)
+    alert(selectedYear)
+    // Construct the URL with query parameters
+    var url = `{{ url_for('queryAlbums') }}?selectedRating=${encodeURIComponent(selectedRating)}&selectedYear=${encodeURIComponent(selectedYear)}`;
+    alert(url)
+    // Make a GET request to the server
+    $('#demo').load(url);
+}
+</script>
+
+</html>
 {% endblock %}

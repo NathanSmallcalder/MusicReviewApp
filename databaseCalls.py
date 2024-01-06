@@ -42,6 +42,33 @@ def get_albums_db():
     finally:
         close_connection(connection, cursor)
 
+def filter_albums(selected_rating, selected_year):
+    # Establish a connection to the database
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor(dictionary=True)
+    '''
+    QUERY FOR SELECTED YEAR,RAITING
+    '''
+    
+    return filtered_albums
+
+
+
+# For queryAlbumPage
+def get_albums_db():
+    try:
+        connection, cursor = get_cursor()
+        sql_select = "SELECT * FROM Album"
+        cursor.execute(sql_select)
+        albums = cursor.fetchall()
+        return albums
+    except Exception as e:
+        # Handle exceptions, log errors, or raise them as needed
+        print(f"Error: {e}")
+        return None
+    finally:
+        close_connection(connection, cursor)
+
 # Inserts user into database
 def sign_up_db(username,email,hashed):
     try:
