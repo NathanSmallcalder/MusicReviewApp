@@ -49,7 +49,44 @@ def filter_albums(selected_rating, selected_year):
     '''
     QUERY FOR SELECTED YEAR,RAITING
     '''
-    
+    query = """
+        SELECT
+            Album.AlbumID,
+            Album.Title,
+            Album.ReleaseDate,
+            Album.CoverImage,
+            Album.ArtistID,
+            AVG(Review.Rating) AS AvgRating
+        FROM
+            Album
+        JOIN
+            Review ON Album.AlbumID = Review.AlbumID
+    """
+
+    conditions = []
+    params = []
+
+    # Add conditions based on the selected rating
+    if selected_rating and selected_rating != 'Any':
+        conditions.append("Review.Rating = %s")
+        params.append(selected_rating)
+
+    # Add conditions based on the selected year
+    if selected_year and selected_year != 'Any':
+        conditions.append("YEAR(Album.ReleaseDate) = %s")
+        params.append(selected_year)
+
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+
+    # Move the GROUP BY clause outside the WHERE clause
+    query += " GROUP BY Album.AlbumID, Album.Title, Album.ReleaseDate, Album.CoverImage, Album.ArtistID"
+
+    print(query)
+
+    cursor.execute(query, params)
+    filtered_albums = cursor.fetchall()
+  
     return filtered_albums
 
 

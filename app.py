@@ -33,8 +33,9 @@ def queryAlbums():
     print(selected_year)
     Albums = filter_albums(selected_rating,selected_year)
     print(Albums)
-    
-    return render_template('index.html', title='Album Review',Albums = Albums)
+    for albums in Albums:
+        print(albums['CoverImage'])
+    return render_template('queryAlbum.html', title='Album Review',Albums = Albums)
     
 
 # Signup

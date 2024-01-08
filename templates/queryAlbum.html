@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+<!---Search Summoner Page---->
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>{{ title }}</title>
+
+    <style>
+        /* Add some styling for the tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -100px; /* Center the tooltip above the text */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .columns {
+            background-color: #181818;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="columns" mx="1rem">
+        <div class="column ml-6 mr-6 pt-6">
+            <div class="select">
+                <select id="ratingSelect">
+                    <option>Any</option>
+                    <option>1 Star</option>
+                    <option>2 Star</option>
+                    <option>3 Star</option>
+                    <option>4 Star</option>
+                    <option>5 Star</option>
+                </select>
+            </div>
+
+            <div id="year" name="year" class="select">
+                <select id="yearSelect">
+                    <option>Any</option>
+                    {% for year in range(2023, 1939, -1) %}
+                        <option value="{{ year }}">{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button class="button" onclick="handleButtonClick()">Button</button>
+            <br>
+            <br>
+
+            {% for album in Albums %}
+                <!-- Wrap each album image in a tooltip container -->
+                <div class="tooltip">
+                    <a href="{{ url_for('getAlbum', album=album['AlbumID']) }}"><img src="{{ album['CoverImage'] }}" height="60" width="60" alt=""></a>
+                    <!-- The tooltip text (album review) -->
+                    <div class="tooltiptext">
+                        <p>{{ album['Title'] }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+<script>
+function handleButtonClick() {
+    // Get selected values from dropdowns
+    var selectedRating = document.getElementById("ratingSelect").value;
+    var selectedYear = document.getElementById("yearSelect").value;
+    alert(selectedRating)
+    alert(selectedYear)
+    // Construct the URL with query parameters
+    var url = `{{ url_for('queryAlbums') }}?selectedRating=${encodeURIComponent(selectedRating)}&selectedYear=${encodeURIComponent(selectedYear)}`;
+    alert(url)
+    // Make a GET request to the server
+    $('#demo').load(url);
+}
+</script>
+
+</html>
+{% endblock %}
