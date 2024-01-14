@@ -9,7 +9,6 @@ app.secret_key = "super secret key"
 
 
 def is_valid_album_review(data):
-    print(data)
     # Check if the required keys are present in the album review data
     required_keys = ['Album','Songs']
     
@@ -22,7 +21,6 @@ def is_valid_album_review(data):
 @app.route('/')
 def index():
     Albums = get_albums_db()
-    print(Albums)
     return render_template('index.html', title='Album Review',Albums = Albums)
 
 @app.route('/queryAlbums')
@@ -95,10 +93,9 @@ def getAlbumReview():
 
     albums = get_album_by_albumID(album)
     album_details = get_album_details(album)
-
     songs = get_songs_by_albumID(album)
     artist = get_artist_by_albumID(album)
-    print(album_details)
+
     SongLen = len(songs)
 
     return render_template('AlbumReviewPage.html', 
@@ -157,10 +154,9 @@ def search():
         search_term = request.form.get('searchTerm')
 
         # Perform the database query
-        search_results = getSearch(search_term)
+        search_results = get_search(search_term)
         # Process the results and send back as JSON
         formatted_results = []
-        print(search_results)
         for row in search_results:
             formatted_results.append({'id': row[0], 'name': row[1]})
 
@@ -168,6 +164,32 @@ def search():
 
     except Exception as e:
         return jsonify({'error': str(e)})
+
+@app.route('/lists', methods=['POST'])
+def userLists():
+    return('indexPage.html')
+
+
+@app.route('/userReview', methods=["GET",'POST'])
+def userReviews():
+    userReviews = get_user_reviews(session['user'])
+    print(userReviews)
+    return render_template('userReviews.html', userReviews = userReviews)
+
+@app.route('/removeReview', methods=["GET", "POST"])
+def removeReview():
+    if request.method == 'POST':
+        # Assuming you're using request.json.get for JSON data
+        album_id = request.json.get('albumID')
+
+        # Assuming you have a function like removeUserReview to handle the deletion
+        removeUserReview(session['user'], album_id)
+
+        # You might want to return a response indicating success or failure
+        return {'status': 'success', 'message': 'Review removed successfully'}
+
+    # Handle GET requests if needed
+    return {'status': 'error', 'message': 'Invalid request method for /removeReview endpoint'}
 
 
 if __name__ == '__main__':

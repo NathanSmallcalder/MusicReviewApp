@@ -51,11 +51,13 @@ CREATE TABLE Song (
 -- Create SongReview table for individual song reviews
 CREATE TABLE SongReview (
     SongReviewID INT PRIMARY KEY AUTO_INCREMENT,
+    AlbumID INT,
     UserID INT,
     SongID INT,
     Rating INT,
     FOREIGN KEY (UserID) REFERENCES User(UserID),
-    FOREIGN KEY (SongID) REFERENCES Song(SongID)
+    FOREIGN KEY (SongID) REFERENCES Song(SongID),
+    FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID)
 );
 
 -- Create UserAlbumList table

@@ -105,36 +105,21 @@
 			{% if 'user' in session %}
 				<div class="navbar-end"> 
 					<div class="navbar-item"> 
-						<div class="dropdown is-active">
-							<div class="dropdown-trigger">
-							  <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-								<span> {{ session['nickname'] }}</span>
-								<span class="icon is-small">
-								  <i class="fas fa-angle-down" aria-hidden="true"></i>
-								</span>
-							  </button>
-							</div>
-							<div class="dropdown-menu" id="dropdown-menu" role="menu">
-							  <div class="dropdown-content">
-								<a href="#" class="dropdown-item">
-								  Reviews
-								</a>
-								<a class="dropdown-item">
-								  Lists
-								</a>
-								<a href="#" class="dropdown-item is-active">
-								  Placeholder
-								</a>
-								<a href="#" class="dropdown-item">
-									Placeholder
-								</a>
-								<hr class="dropdown-divider">
-								<a href="{{ url_for('logout') }}" class="dropdown-item">
-									Logout
-								</a>
-							  </div>
-							</div>
-						  </div>
+						<div class="field is-grouped"> 
+							<p class="control"> 
+								<a href="{{ url_for('userLists') }}" class="button">My Lists</a> 
+							</p> 
+							<p class="control"> 
+								<a href="{{ url_for('userReviews') }}" class="button" >My Reviews</a> 
+							</p> 
+							<p class="control"> 
+								<a href="{{ url_for('logout') }}" class="button">Logout</a> 
+							</p> 
+
+						</div> 
+					</div> 
+				</div> 
+			</div> 
 			{% else %}
 				<div class="navbar-end"> 
 					<div class="navbar-item"> 

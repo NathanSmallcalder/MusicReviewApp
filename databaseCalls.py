@@ -315,12 +315,10 @@ def get_album_comments(album_id):
             connection.close()
 
 
-def getSearch(search_term):
+def get_search(search_term):
     try:
         connection, cursor = get_cursor()
-        query = f"""
-                    SELECT * FROM Album WHERE Title LIKE '%{search_term}%'
-                """
+        query = f""" SELECT * FROM Album WHERE Title LIKE '%{search_term}%' """
         cursor.execute(query)
         search_results = cursor.fetchall()
         return search_results
@@ -333,4 +331,53 @@ def getSearch(search_term):
         if cursor:
             cursor.close()
         if connection.is_connected():
+            connection.close()
+            
+def get_user_reviews(userId):
+    try:
+        connection, cursor = get_cursor()
+        query = """SELECT Album.AlbumID, Album.Title,Album.CoverImage, Review.Rating, Review.Comment, Review.DatePosted
+                    FROM Album
+                    JOIN Review ON Album.AlbumID = Review.AlbumID
+                    WHERE UserID = %s;"""
+        cursor.execute(query, (userId,))
+        search_results = cursor.fetchall()
+        return search_results
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+    finally:
+        # Close the cursor and connection
+        if cursor:
+            cursor.close()
+        if connection.is_connected():
+            connection.close()
+
+import mysql.connector
+
+def removeUserReview(userID, albumID):
+    try:
+        connection, cursor = get_cursor()
+
+        # Delete SongReviews for the specified User and Album
+        delete_song_reviews_query = "DELETE FROM SongReview WHERE UserID = %s AND AlbumID = %s"
+        cursor.execute(delete_song_reviews_query, (userID, albumID))
+
+        # Delete the reviews associated with the given user and album
+        delete_reviews_query = "DELETE FROM Review WHERE UserID = %s AND AlbumID = %s"
+        cursor.execute(delete_reviews_query, (userID, albumID))
+
+        # Commit the changes to the database
+        connection.commit()
+
+        print("Deletion successful!")
+
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+
+    finally:
+        # Close the database connection
+        if connection.is_connected():
+            cursor.close()
             connection.close()
