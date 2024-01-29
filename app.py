@@ -158,17 +158,18 @@ def search():
         # Process the results and send back as JSON
         formatted_results = []
         for row in search_results:
-            formatted_results.append({'id': row[0], 'name': row[1]})
-
+            formatted_results.append({'id': row[0], 'name': row[1],'image_url':row[3]})
+        print(formatted_results)
         return jsonify(formatted_results)
 
     except Exception as e:
         return jsonify({'error': str(e)})
 
-@app.route('/lists', methods=['POST'])
+@app.route('/lists', methods=["GET",'POST'])
 def userLists():
-    return('indexPage.html')
-
+    Albums = get_albums_db()
+    print(Albums)
+    return render_template('ListPage.html',Albums = Albums)
 
 @app.route('/userReview', methods=["GET",'POST'])
 def userReviews():
@@ -192,5 +193,22 @@ def removeReview():
     return {'status': 'error', 'message': 'Invalid request method for /removeReview endpoint'}
 
 
+@app.route('/addList', methods=['GET', "POST"])
+def addList():
+   content_type = request.headers.get('Content-Type')
+   if (content_type == 'application/json'):
+        try:
+            data = request.get_json()
+            list_name = data.get('listName')
+            album_ids = data.get('albumIds')
+            response_data = {'listName': list_name, 'albumIds': album_ids}
+            insertUserList(response_data,session['user'])
+
+            return jsonify(response_data), 200
+            #Post to Database
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)

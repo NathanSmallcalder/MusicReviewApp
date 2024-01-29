@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>{{ title }}</title>
+
+    <style>
+        /* Add your custom styles here */
+        .card.has-background-info {
+            /* Add styles for the user container */
+            border: 1px solid #aaa;
+            height: 500px; /* Set a fixed height for the user container */
+            margin-bottom: 20px;
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+        }
+
+        .card.has-background {
+            /* Add styles for the draggable container */
+            height: 700px; /* Set a fixed height for the draggable container */
+            overflow-y: auto; /* Enable vertical scrolling if needed */
+            border: 20px;
+        }
+
+        .draggable-album {
+            /* Add styles for the draggable albums */
+            display: inline-block;
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="column"> 
+        <div class="card">
+            <div class="card-content">
+                <div class="search-container">
+                    <input type="input" id="list-name-input" placeholder="List Name">
+                </div>
+                <button class="button" onclick="handleButtonClick()">Button</button>
+            </div> 
+        </div>
+    </div>
+
+    <!-- User Container -->
+    <div class="columns is-multiline"> 
+        <div class="column half">
+            <div class="card has-background" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div class="card-content">
+                    <div class="content" id="user-container">
+                        <!-- User container content will be dynamically updated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draggable Container -->
+        <div class="column half">
+            <div class="card has-background">
+                <div class="card-content">
+                    <div class="content">
+                        {% for album in Albums %}
+                            <img src="{{ album[3] }}" height="60" width="60" alt=""
+                                class="draggable-album" draggable="true" 
+                                ondragstart="dragStart(event)" id="{{ album[0] }}">
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var link = "{{ url_for('addList') }}";
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+    
+        function dragStart(event) {
+            // Make sure it's a draggable element
+            if (event.target.draggable) {
+                event.dataTransfer.setData("text", event.target.id);
+            }
+        }
+    
+        function drop(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var draggedElement = document.getElementById(data);
+    
+            // Append the dragged element to the user container
+            document.getElementById('user-container').appendChild(draggedElement.cloneNode(true));
+        }
+
+        function handleButtonClick() {
+            // Get the list name
+            var listName = document.getElementById('list-name-input').value;
+            
+            // Get the album IDs in the user container
+            var userContainer = document.getElementById('user-container');
+            var albumIds = Array.from(userContainer.children).map(function(element) {
+                return element.id;
+            });
+
+            // Perform any further actions with listName and albumIds
+            console.log("List Name: ", listName);
+            console.log("Album IDs in User Container: ", albumIds);
+            postData(link,listName,albumIds)
+        }
+
+        function postData(link, listName, albumIds) {
+        fetch(link, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listName: listName,
+                albumIds: albumIds
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle the response data as needed
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Handle errors
+        });
+    }
+    </script>
+</body>
+</html>
+{% endblock %}

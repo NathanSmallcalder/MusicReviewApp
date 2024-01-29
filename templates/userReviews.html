@@ -32,7 +32,7 @@
                 </header>
                 <div class="card-content">
                     <div class="content">
-                        <a href="{{ url_for('getAlbum', album=review[1]) }}">
+                        <a href="{{ url_for('getAlbum', album=review[0]) }}">
                             <img src="{{ review[2] }}" height="60" width="60" alt="">
                             {{ review[1] }}
                         </a>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <footer class="card-footer">
-                    <a href="#" class="card-footer-item">Edit</a>
+                    <a href="{{ url_for('getAlbumReview', album=review[0]) }}"  class="card-footer-item">Edit</a>
                     <a href="#" class="card-footer-item delete-button" data-albumid="{{ review[0] }}">Delete</a>
                 </footer>
             </div>

@@ -28,7 +28,7 @@ connection = mysql.connector.connect(**config)
 
 cursor = connection.cursor(buffered=True)
 
-related = get_related_artists("5INjqkS1o8h1imAzPqGZBb",token)
+related = get_related_artists("06HL4z0CvFAxyc27GXpf02",token)
 related_artists = related_artist_ids(related)
 
 

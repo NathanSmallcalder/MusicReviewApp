@@ -381,3 +381,25 @@ def removeUserReview(userID, albumID):
         if connection.is_connected():
             cursor.close()
             connection.close()
+
+def insertUserList(data, user_id):
+    connection, cursor = get_cursor()  # Assuming you have a function named get_cursor
+
+    # Insert into UserAlbumList
+    insert_user_album_list_query = "INSERT INTO UserAlbumList (UserID, ListName, Description, CreatedDate) VALUES (%s, %s, %s, %s)"
+    description = "Some description"
+    created_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    user_album_list_data = (user_id, data.get('listName', ''), description, created_date)
+    cursor.execute(insert_user_album_list_query, user_album_list_data)
+    user_list_id = cursor.lastrowid
+
+    # Insert into List
+    insert_list_query = "INSERT INTO List (UserListID, AlbumID) VALUES (%s, %s)"
+    for ids in data['albumIds']:
+        list_data = (user_list_id, ids)
+        cursor.execute(insert_list_query, list_data)
+
+    # Commit the changes to the database
+    connection.commit()
+
+ 

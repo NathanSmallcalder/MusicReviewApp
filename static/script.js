@@ -30,20 +30,15 @@ $(document).ready(function() {
     
         if (Array.isArray(data) && data.length > 0) {
             data.forEach(function (result, index) {
-                // Create a list item for each result
                 var listItem = $("<li>");
                 listItem.text(result.name);
     
-                // Add a class for typing animation and make it clickable
                 listItem.addClass("typing-animation clickable-item");
     
-                // Add data-id attribute to store the ID
                 listItem.attr("data-id", result.id);
     
-                // Append the list item to the results container
                 resultsContainer.append(listItem);
     
-                // Remove the typing animation class after a delay
                 setTimeout(function () {
                     listItem.removeClass("typing-animation");
                 }, index * 100); // Adjust the delay as needed
