@@ -7,6 +7,14 @@ from databaseCalls import *
 app = Flask(__name__)
 app.secret_key = "super secret key"
 
+from jinja2 import Environment
+
+def jinja2_min(a, b):
+    return min(a, b)
+
+# Add the custom filter to Jinja's environment
+env = Environment()
+env.filters['min'] = jinja2_min
 
 def is_valid_album_review(data):
     # Check if the required keys are present in the album review data
@@ -23,10 +31,15 @@ def index():
     Albums = get_albums_db()
     return render_template('index.html', title='Album Review',Albums = Albums)
 
+@app.route('/albums')
+def albums():
+    Albums = get_albums_db() 
+    return render_template('index.html', title='Album Review', Albums=Albums)
+
 @app.route('/queryAlbums')
 def queryAlbums():
     # Get selected rating and year from the query parameters
-    selected_rating = request.args.get('selectedRating', None)
+    selected_rating = request.args.get('selectedRating', None) 
     selected_year = request.args.get('selectedYear', None)
     print(selected_year)
     Albums = filter_albums(selected_rating,selected_year)

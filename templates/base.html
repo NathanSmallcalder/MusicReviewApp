@@ -5,20 +5,23 @@
 	<meta charset="utf-8" />
 	<link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="static/script.js"></script>
 
 	
 	<title>Music Review App</title>
 	<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 	<style>
-
+		a {
+			font:'Roboto';
+			font-size: 24px;
+		}
 		body {
 			font-family: 'Roboto';
 			color: white;
 		}
 		.navbar {
-			background-color:#191414 ;
+			background-color:#181818 ;
 			color: white;
 			padding:5px;
 		}
@@ -79,14 +82,13 @@
 
 		<div id="navBackgroundDemo1" 
 			 class="navbar-menu"> 
-			<div class="navbar-start"> 
-				<a href="{{ url_for('index') }}" class="navbar-item" 
-				   href="#"> 
-					Home 
-				</a> 
-	
+			<div id="navbarBasicExample" class="navbar-menu">
+				<div class="navbar-start">
+					<a href="{{ url_for('index') }}" class="navbar-item" >
+						Home
+					</a>
 			<div class="search-container">
-					<input type="input" id="search-input" placeholder="Search...">
+					<input  class="input is-rounded" id="search-input" placeholder="Search..."> 
 					<ul id="search-results"></ul>
 				</div>
 			</div> 

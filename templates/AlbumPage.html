@@ -82,14 +82,26 @@
                     {{ comment[0] }}
                     <a href="#">@ {{ comment[2] }}</a>
                     <br>
-                    <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+                    <time>{{ comment[1] }} </time>
             </div>
         </div>
         {% endfor %}
         </div>
     </div>
 </body>
-
+<script>
+    function updateDateTime() {
+      var now = new Date();
+      var dateTimeElement = document.getElementById("datetime");
+      dateTimeElement.innerHTML = now.toLocaleString();
+    }
+    
+    // Update the date and time every second
+    setInterval(updateDateTime, 1000);
+    
+    // Initial call to display date and time
+    updateDateTime();
+    </script>
 </html>
 
 {% endblock %}
